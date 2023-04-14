@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import warnings
 from logging import getLogger
+from multiprocessing import cpu_count
 from pathlib import Path
 from typing import Any
 
@@ -20,6 +21,7 @@ import so_vits_svc_fork.utils
 
 from . import utils
 from .dataset import TextAudioCollate, TextAudioDataset
+from .logger import is_notebook
 from .modules.descriminators import MultiPeriodDiscriminator
 from .modules.losses import discriminator_loss, feature_loss, generator_loss, kl_loss
 from .modules.mel_processing import mel_spectrogram_torch
@@ -41,9 +43,10 @@ class VCDataModule(pl.LightningDataModule):
         self.val_dataset = TextAudioDataset(self.__hparams, is_validation=True)
 
     def train_dataloader(self):
-        # since dataset just reads data from a file, set num_workers to 0
         return DataLoader(
             self.train_dataset,
+            # pin_memory=False,
+            num_workers=min(cpu_count(), self.__hparams.train.get("num_workers", 4)),
             batch_size=self.__hparams.train.batch_size,
             collate_fn=self.collate_fn,
         )
@@ -51,6 +54,7 @@ class VCDataModule(pl.LightningDataModule):
     def val_dataloader(self):
         return DataLoader(
             self.val_dataset,
+            # pin_memory=False,
             batch_size=1,
             collate_fn=self.collate_fn,
         )
@@ -66,6 +70,10 @@ def train(
     utils.ensure_pretrained_model(model_path, hparams.model.get("type_", "hifi-gan"))
 
     datamodule = VCDataModule(hparams)
+    strategy = (
+        "ddp_find_unused_parameters_true" if torch.cuda.device_count() > 1 else "auto"
+    )
+    LOG.info(f"Using strategy: {strategy}")
     trainer = pl.Trainer(
         logger=TensorBoardLogger(model_path),
         # profiler="simple",
@@ -77,6 +85,8 @@ def train(
         else "bf16-mixed"
         if hparams.train.get("bf16_run", False)
         else 32,
+        strategy=strategy,
+        callbacks=[pl.callbacks.RichProgressBar()] if is_notebook() else None,
     )
     model = VitsLightning(reset_optimizer=reset_optimizer, **hparams)
     trainer.fit(model, datamodule=datamodule)
@@ -326,7 +336,6 @@ class VitsLightning(pl.LightningModule):
         )
 
         # generator loss
-        LOG.debug("Calculating generator loss")
         y_d_hat_r, y_d_hat_g, fmap_r, fmap_g = self.net_d(y, y_hat)
 
         with autocast(enabled=False):
@@ -349,9 +358,6 @@ class VitsLightning(pl.LightningModule):
             loss_gen_all += loss_subband
 
         # log loss
-        self.log_(
-            "grad_norm_g", commons.clip_grad_value_(self.net_g.parameters(), None)
-        )
         self.log_("lr", self.optim_g.param_groups[0]["lr"])
         self.log_dict_(
             {
@@ -388,10 +394,16 @@ class VitsLightning(pl.LightningModule):
                 }
             )
 
+        accumulate_grad_batches = self.hparams.train.get("accumulate_grad_batches", 1)
+        should_update = (batch_idx + 1) % accumulate_grad_batches == 0
         # optimizer
-        optim_g.zero_grad()
-        self.manual_backward(loss_gen_all)
-        optim_g.step()
+        self.manual_backward(loss_gen_all / accumulate_grad_batches)
+        if should_update:
+            self.log_(
+                "grad_norm_g", commons.clip_grad_value_(self.net_g.parameters(), None)
+            )
+            optim_g.step()
+            optim_g.zero_grad()
         self.untoggle_optimizer(optim_g)
 
         # Discriminator
@@ -408,14 +420,15 @@ class VitsLightning(pl.LightningModule):
 
         # log loss
         self.log_("loss/d/total", loss_disc_all, prog_bar=True)
-        self.log_(
-            "grad_norm_d", commons.clip_grad_value_(self.net_d.parameters(), None)
-        )
 
         # optimizer
-        optim_d.zero_grad()
-        self.manual_backward(loss_disc_all)
-        optim_d.step()
+        self.manual_backward(loss_disc_all / accumulate_grad_batches)
+        if should_update:
+            self.log_(
+                "grad_norm_d", commons.clip_grad_value_(self.net_d.parameters(), None)
+            )
+            optim_d.step()
+            optim_d.zero_grad()
         self.untoggle_optimizer(optim_d)
 
         # end of epoch

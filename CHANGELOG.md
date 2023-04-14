@@ -2,6 +2,51 @@
 
 <!--next-version-placeholder-->
 
+## v3.6.1 (2023-04-14)
+### Fix
+* **train:** Fix gradient logging ([#320](https://github.com/34j/so-vits-svc-fork/issues/320)) ([`73ef3dc`](https://github.com/34j/so-vits-svc-fork/commit/73ef3dc94ccd4c0514ab33b0c5a65edf8b356484))
+
+## v3.6.0 (2023-04-13)
+### Feature
+* **realtime:** Support sola algorithm ([#316](https://github.com/34j/so-vits-svc-fork/issues/316)) ([`0fcbf99`](https://github.com/34j/so-vits-svc-fork/commit/0fcbf9979862e945ca2427612a92549db2d627d0))
+
+## v3.5.1 (2023-04-13)
+### Fix
+* **logger:** Do not use rich in notebook ([#317](https://github.com/34j/so-vits-svc-fork/issues/317)) ([`03c8240`](https://github.com/34j/so-vits-svc-fork/commit/03c824015872e3d7e4e5795b9d65fad4116d54e4))
+
+## v3.5.0 (2023-04-13)
+### Feature
+* **gui:** Run inference in thread and disable button ([#279](https://github.com/34j/so-vits-svc-fork/issues/279)) ([`c55caa8`](https://github.com/34j/so-vits-svc-fork/commit/c55caa8019cc06fc6bd8851b0fd895b73cf926a4))
+
+## v3.4.0 (2023-04-13)
+### Feature
+* **train:** Make num_workers configurable ([#315](https://github.com/34j/so-vits-svc-fork/issues/315)) ([`e8df714`](https://github.com/34j/so-vits-svc-fork/commit/e8df7146b0d1d3ee32af576c251f47d8fdd80bb3))
+
+## v3.3.1 (2023-04-13)
+### Performance
+* **train:** Specify num_workers in DataLoader ([#313](https://github.com/34j/so-vits-svc-fork/issues/313)) ([`6042164`](https://github.com/34j/so-vits-svc-fork/commit/6042164a60f9990eb0636e37dd650bb0cdff032b))
+
+## v3.3.0 (2023-04-13)
+### Feature
+* **train:** Use RichProgressBar ([#311](https://github.com/34j/so-vits-svc-fork/issues/311)) ([`17e937a`](https://github.com/34j/so-vits-svc-fork/commit/17e937aae9c90b513e4b7674f442a60161c84e83))
+
+## v3.2.0 (2023-04-13)
+### Feature
+* **train:** Add optional `accumulate_grad_batches` config param ([#306](https://github.com/34j/so-vits-svc-fork/issues/306)) ([`1172b23`](https://github.com/34j/so-vits-svc-fork/commit/1172b2385cfe5239da3222cf93916436395e0f1a))
+
+## v3.1.13 (2023-04-12)
+### Fix
+* **logger:** Fix too noisy logger ([#300](https://github.com/34j/so-vits-svc-fork/issues/300)) ([`bd0eb33`](https://github.com/34j/so-vits-svc-fork/commit/bd0eb33a66d77afff8328d08008f2643651c712a))
+* **__main__:** Fix cli() not called in __main__ ([#299](https://github.com/34j/so-vits-svc-fork/issues/299)) ([`11f2d24`](https://github.com/34j/so-vits-svc-fork/commit/11f2d245137da240f5e8214e4b6ce4330d726143))
+
+## v3.1.12 (2023-04-12)
+### Fix
+* **train:** Fix ddp not working ([#297](https://github.com/34j/so-vits-svc-fork/issues/297)) ([`bec43fc`](https://github.com/34j/so-vits-svc-fork/commit/bec43fcbedf6b16260411655b19cf780ddbafe8e))
+
+## v3.1.11 (2023-04-12)
+### Fix
+* **logger:** Fix init_logger not showing debug messages in certain conditions as intended ([#296](https://github.com/34j/so-vits-svc-fork/issues/296)) ([`d3ab7d6`](https://github.com/34j/so-vits-svc-fork/commit/d3ab7d667c391ba1d8d1b34e2b66992256b3989d))
+
 ## v3.1.10 (2023-04-11)
 ### Fix
 * **notebooks:** Improves inference ([#286](https://github.com/34j/so-vits-svc-fork/issues/286)) ([`d3228df`](https://github.com/34j/so-vits-svc-fork/commit/d3228df704b2e6a0746b3f842ca5f2240890d829))
