@@ -2,6 +2,75 @@
 
 <!--next-version-placeholder-->
 
+## v3.10.3 (2023-04-19)
+### Fix
+* **train:** Don't save model when tuning for auto batch size ([`2311a35`](https://github.com/voicepaw/so-vits-svc-fork/commit/2311a35c36315123c87b7f20dde3c4dda723bea3))
+
+## v3.10.2 (2023-04-19)
+### Fix
+* **train:** Properly stop training after `epochs` has been reached ([`f9bb3d8`](https://github.com/voicepaw/so-vits-svc-fork/commit/f9bb3d86605321288f11387bc853143378c3284e))
+
+## v3.10.1 (2023-04-19)
+### Fix
+* **train:** Support ddp in Windows (gloo backend) ([#394](https://github.com/34j/so-vits-svc-fork/issues/394)) ([`bcb0507`](https://github.com/34j/so-vits-svc-fork/commit/bcb05078d8ca7a6ac681de919552b3a190b2cd9b))
+
+## v3.10.0 (2023-04-18)
+### Feature
+* Replace `fairseq` with `transformers` ([#385](https://github.com/34j/so-vits-svc-fork/issues/385)) ([`a2fe0f3`](https://github.com/34j/so-vits-svc-fork/commit/a2fe0f376d33f02987c91a57bd90a794de90a0e1))
+
+## v3.9.5 (2023-04-18)
+### Fix
+* **train:** Set persistent_workers = True in DataLoader for performance, do not save checkpoints, fix logging issue and multiple warning issues, do not do validation when global_step == 0 ([#384](https://github.com/34j/so-vits-svc-fork/issues/384)) ([`6cab9af`](https://github.com/34j/so-vits-svc-fork/commit/6cab9af86e3a96e79243fa890eb1c6c51fae4476))
+
+## v3.9.4 (2023-04-18)
+### Fix
+* **gui:** Always use "spawn" context in ProcessPool ([#383](https://github.com/34j/so-vits-svc-fork/issues/383)) ([`5d7fb77`](https://github.com/34j/so-vits-svc-fork/commit/5d7fb774e8d5e97a9a31dbc891892e9f934f3884))
+
+## v3.9.3 (2023-04-16)
+### Fix
+* **gui:** Fix subprocess errors in linux and fix wrong error logging ([#358](https://github.com/34j/so-vits-svc-fork/issues/358)) ([`fd67db6`](https://github.com/34j/so-vits-svc-fork/commit/fd67db6312944557c09afd7b1ccbb97987a03489))
+
+## v3.9.2 (2023-04-16)
+### Fix
+* **train:** Fix y_mel length ([#356](https://github.com/34j/so-vits-svc-fork/issues/356)) ([`2d71992`](https://github.com/34j/so-vits-svc-fork/commit/2d71992d80ba4142d2d5a5df17c69c2f2ac553fd))
+
+## v3.9.1 (2023-04-16)
+### Fix
+* **train:** Allow higher segment size ([#351](https://github.com/34j/so-vits-svc-fork/issues/351)) ([`09d5a52`](https://github.com/34j/so-vits-svc-fork/commit/09d5a52b9bfc8eba8857f2b6c804ecdb39b4b38b))
+* **cluster:** Do not use weights_only in get_cluster_model() ([#354](https://github.com/34j/so-vits-svc-fork/issues/354)) ([`24c05d1`](https://github.com/34j/so-vits-svc-fork/commit/24c05d16c3b55f664699400496a7e0fd2fd84353))
+
+## v3.9.0 (2023-04-16)
+### Feature
+* **train:** Add option to name ckpts by epochs ([#353](https://github.com/34j/so-vits-svc-fork/issues/353)) ([`bba24c4`](https://github.com/34j/so-vits-svc-fork/commit/bba24c4a62b935ed29572aa2c2c437d1b54aa2e2))
+
+## v3.8.1 (2023-04-16)
+### Fix
+* Patch stft and add mps to get_optimal_device() ([#352](https://github.com/34j/so-vits-svc-fork/issues/352)) ([`da928aa`](https://github.com/34j/so-vits-svc-fork/commit/da928aa0bb1399bf5780526f8a7e9b674476a000))
+
+## v3.8.0 (2023-04-15)
+### Feature
+* **train:** Automatically decide batch_size ([#342](https://github.com/34j/so-vits-svc-fork/issues/342)) ([`8ffa128`](https://github.com/34j/so-vits-svc-fork/commit/8ffa128aa209787fde8fb1f0e4ae5c96dfe31217))
+
+## v3.7.3 (2023-04-15)
+### Fix
+* **gui:** Show errors raised in inference ([#341](https://github.com/34j/so-vits-svc-fork/issues/341)) ([`99833c5`](https://github.com/34j/so-vits-svc-fork/commit/99833c55045647b9a766042765b454cb3d7d18ce))
+
+## v3.7.2 (2023-04-15)
+### Fix
+* **train:** Suppress pytorch logs for deprecated TypedStorage ([#336](https://github.com/34j/so-vits-svc-fork/issues/336)) ([`e67ac62`](https://github.com/34j/so-vits-svc-fork/commit/e67ac621296cf6667d05b51f23ce8cb9ef8a0855))
+
+## v3.7.1 (2023-04-15)
+### Fix
+* **train:** Fix check for notebook / Colab ([#335](https://github.com/34j/so-vits-svc-fork/issues/335)) ([`7f69814`](https://github.com/34j/so-vits-svc-fork/commit/7f698141e1b65e901579a5dbbabf28bfae5cc91f))
+
+## v3.7.0 (2023-04-14)
+### Feature
+* **train:** Add option to specify TensorBoardLogger version parameter support ([#331](https://github.com/34j/so-vits-svc-fork/issues/331)) ([`a685123`](https://github.com/34j/so-vits-svc-fork/commit/a685123a4063e08e0b021a1ad51098d3154b75de))
+
+## v3.6.2 (2023-04-14)
+### Fix
+* Fix torch.load and save to use file objects and weights_only and remove unidecode ([#327](https://github.com/34j/so-vits-svc-fork/issues/327)) ([`4aad701`](https://github.com/34j/so-vits-svc-fork/commit/4aad701badc1eae5195e874dec40f9ed8dd40ee6))
+
 ## v3.6.1 (2023-04-14)
 ### Fix
 * **train:** Fix gradient logging ([#320](https://github.com/34j/so-vits-svc-fork/issues/320)) ([`73ef3dc`](https://github.com/34j/so-vits-svc-fork/commit/73ef3dc94ccd4c0514ab33b0c5a65edf8b356484))

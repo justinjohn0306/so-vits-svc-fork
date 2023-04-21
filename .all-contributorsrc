@@ -1,6 +1,6 @@
 {
   "projectName": "so-vits-svc-fork",
-  "projectOwner": "34j",
+  "projectOwner": "voicepaw",
   "repoType": "github",
   "repoHost": "https://github.com",
   "files": [
@@ -37,7 +37,8 @@
       "contributions": [
         "code",
         "bug",
-        "doc"
+        "doc",
+        "review"
       ]
     },
     {
@@ -48,7 +49,8 @@
       "contributions": [
         "ideas",
         "question",
-        "code"
+        "code",
+        "maintenance"
       ]
     },
     {
@@ -77,7 +79,11 @@
       "profile": "https://github.com/Lordmau5",
       "contributions": [
         "bug",
-        "code"
+        "code",
+        "ideas",
+        "maintenance",
+        "question",
+        "userTesting"
       ]
     },
     {
@@ -168,7 +174,149 @@
       "profile": "https://github.com/sbersier",
       "contributions": [
         "ideas",
-        "userTesting"
+        "userTesting",
+        "bug"
+      ]
+    },
+    {
+      "login": "Meldoner",
+      "name": "Meldoner",
+      "avatar_url": "https://avatars.githubusercontent.com/u/43951115?v=4",
+      "profile": "https://github.com/Meldoner",
+      "contributions": [
+        "bug"
+      ]
+    },
+    {
+      "login": "mmodeusher",
+      "name": "mmodeusher",
+      "avatar_url": "https://avatars.githubusercontent.com/u/46575920?v=4",
+      "profile": "https://github.com/mmodeusher",
+      "contributions": [
+        "bug"
+      ]
+    },
+    {
+      "login": "AlonDan",
+      "name": "AlonDan",
+      "avatar_url": "https://avatars.githubusercontent.com/u/21152334?v=4",
+      "profile": "https://github.com/AlonDan",
+      "contributions": [
+        "bug"
+      ]
+    },
+    {
+      "login": "Likkkez",
+      "name": "Likkkez",
+      "avatar_url": "https://avatars.githubusercontent.com/u/44336181?v=4",
+      "profile": "https://github.com/Likkkez",
+      "contributions": [
+        "bug"
+      ]
+    },
+    {
+      "login": "DuctTapeGames",
+      "name": "Duct Tape Games",
+      "avatar_url": "https://avatars.githubusercontent.com/u/84365142?v=4",
+      "profile": "https://github.com/DuctTapeGames",
+      "contributions": [
+        "bug"
+      ]
+    },
+    {
+      "login": "hxl9654",
+      "name": "Xianglong He",
+      "avatar_url": "https://avatars.githubusercontent.com/u/6624983?v=4",
+      "profile": "https://tec.hxlxz.com/",
+      "contributions": [
+        "bug"
+      ]
+    },
+    {
+      "login": "75aosu",
+      "name": "75aosu",
+      "avatar_url": "https://avatars.githubusercontent.com/u/79185331?v=4",
+      "profile": "https://github.com/75aosu",
+      "contributions": [
+        "bug"
+      ]
+    },
+    {
+      "login": "tonyco82",
+      "name": "tonyco82",
+      "avatar_url": "https://avatars.githubusercontent.com/u/56610534?v=4",
+      "profile": "https://github.com/tonyco82",
+      "contributions": [
+        "bug"
+      ]
+    },
+    {
+      "login": "yxlllc",
+      "name": "yxlllc",
+      "avatar_url": "https://avatars.githubusercontent.com/u/33565655?v=4",
+      "profile": "https://github.com/yxlllc",
+      "contributions": [
+        "ideas",
+        "code"
+      ]
+    },
+    {
+      "login": "outhipped",
+      "name": "outhipped",
+      "avatar_url": "https://avatars.githubusercontent.com/u/116147475?v=4",
+      "profile": "https://github.com/outhipped",
+      "contributions": [
+        "bug"
+      ]
+    },
+    {
+      "login": "escoolioinglesias",
+      "name": "escoolioinglesias",
+      "avatar_url": "https://avatars.githubusercontent.com/u/73505402?v=4",
+      "profile": "https://github.com/escoolioinglesias",
+      "contributions": [
+        "bug",
+        "userTesting",
+        "video"
+      ]
+    },
+    {
+      "login": "Blacksingh",
+      "name": "Blacksingh",
+      "avatar_url": "https://avatars.githubusercontent.com/u/130872856?v=4",
+      "profile": "https://github.com/Blacksingh",
+      "contributions": [
+        "bug"
+      ]
+    },
+    {
+      "login": "tybantarnusa",
+      "name": "Mgs. M. Thoyib Antarnusa",
+      "avatar_url": "https://avatars.githubusercontent.com/u/9532857?v=4",
+      "profile": "http://tybantarnusa.com",
+      "contributions": [
+        "bug"
+      ]
+    },
+    {
+      "login": "ZeroHackz",
+      "name": "Exosfeer",
+      "avatar_url": "https://avatars.githubusercontent.com/u/15729496?v=4",
+      "profile": "https://github.com/ZeroHackz",
+      "contributions": [
+        "bug",
+        "code"
+      ]
+    },
+    {
+      "login": "guranon",
+      "name": "guranon",
+      "avatar_url": "https://avatars.githubusercontent.com/u/130421189?v=4",
+      "profile": "https://github.com/guranon",
+      "contributions": [
+        "bug",
+        "ideas",
+        "code"
       ]
     }
   ],

@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import re
 import subprocess
+import warnings
 from itertools import groupby
 from logging import getLogger
 from pathlib import Path
@@ -13,11 +14,13 @@ import matplotlib.pylab as plt
 import numpy as np
 import requests
 import torch
+import torch.backends.mps
+import torch.nn as nn
+import torchaudio
 from cm_time import timer
-from fairseq import checkpoint_utils
-from fairseq.models.hubert.hubert import HubertModel
 from numpy import ndarray
 from tqdm import tqdm
+from transformers import HubertModel
 
 from so_vits_svc_fork.hparams import HParams
 
@@ -28,6 +31,8 @@ HUBERT_SAMPLING_RATE = 16000
 def get_optimal_device(index: int = 0) -> torch.device:
     if torch.cuda.is_available():
         return torch.device(f"cuda:{index % torch.cuda.device_count()}")
+    elif torch.backends.mps.is_available():
+        return torch.device("mps")
     else:
         try:
             import torch_xla.core.xla_model as xm  # noqa
@@ -130,20 +135,25 @@ def ensure_pretrained_model(
     return
 
 
-def get_hubert_model(device: str | torch.device) -> HubertModel:
-    (path,) = ensure_pretrained_model(Path("."), "contentvec")
+class HubertModelWithFinalProj(HubertModel):
+    def __init__(self, config):
+        super().__init__(config)
 
-    models, saved_cfg, task = checkpoint_utils.load_model_ensemble_and_task(
-        [path.as_posix()],
-        suffix="",
-    )
-    model = models[0]
-    return model.eval().to(device)
+        # The final projection layer is only used for backward compatibility.
+        # Following https://github.com/auspicious3000/contentvec/issues/6
+        # Remove this layer is necessary to achieve the desired outcome.
+        self.final_proj = nn.Linear(config.hidden_size, config.classifier_proj_size)
 
 
-import warnings
-
-import torchaudio
+def get_hubert_model(
+    device: str | torch.device, final_proj: bool = True
+) -> HubertModel:
+    if final_proj:
+        return HubertModelWithFinalProj.from_pretrained(
+            "lengyue233/content-vec-best"
+        ).to(device)
+    else:
+        return HubertModel.from_pretrained("lengyue233/content-vec-best").to(device)
 
 
 def get_content(
@@ -163,12 +173,11 @@ def get_content(
     if audio.ndim == 1:
         audio = audio.unsqueeze(0)
     with torch.no_grad(), timer() as t:
-        params = {"output_layer": 9} if legacy_final_proj else {}
-        c: torch.Tensor = cmodel.extract_features(audio, **params)[0]
+        c = cmodel(audio)["last_hidden_state"]
         if legacy_final_proj:
             warnings.warn("legacy_final_proj is deprecated")
-            assert hasattr(cmodel, "final_proj")
-            assert isinstance(cmodel.final_proj, torch.nn.Module)
+            if not hasattr(cmodel, "final_proj"):
+                raise ValueError("HubertModel does not have final_proj")
             c = cmodel.final_proj(c)
         c = c.transpose(1, 2)
     wav_len = audio.shape[-1] / HUBERT_SAMPLING_RATE
@@ -188,7 +197,7 @@ def _substitute_if_same_shape(to_: dict[str, Any], from_: dict[str, Any]) -> Non
     shape_missmatch = []
     for k, v in from_.items():
         if k not in to_:
-            warnings.warn(f"Key {k} not found in model state dict")
+            pass
         elif hasattr(v, "shape"):
             if not hasattr(to_[k], "shape"):
                 raise ValueError(f"Key {k} is not a tensor")
@@ -221,7 +230,12 @@ def load_checkpoint(
 ) -> tuple[torch.nn.Module, torch.optim.Optimizer | None, float, int]:
     if not Path(checkpoint_path).is_file():
         raise FileNotFoundError(f"File {checkpoint_path} not found")
-    checkpoint_dict = torch.load(checkpoint_path, map_location="cpu")
+    with Path(checkpoint_path).open("rb") as f:
+        with warnings.catch_warnings():
+            warnings.filterwarnings(
+                "ignore", category=UserWarning, message="TypedStorage is deprecated"
+            )
+            checkpoint_dict = torch.load(f, map_location="cpu", weights_only=True)
     iteration = checkpoint_dict["iteration"]
     learning_rate = checkpoint_dict["learning_rate"]
 
@@ -260,15 +274,16 @@ def save_checkpoint(
         state_dict = model.module.state_dict()
     else:
         state_dict = model.state_dict()
-    torch.save(
-        {
-            "model": state_dict,
-            "iteration": iteration,
-            "optimizer": optimizer.state_dict(),
-            "learning_rate": learning_rate,
-        },
-        checkpoint_path,
-    )
+    with Path(checkpoint_path).open("wb") as f:
+        torch.save(
+            {
+                "model": state_dict,
+                "iteration": iteration,
+                "optimizer": optimizer.state_dict(),
+                "learning_rate": learning_rate,
+            },
+            f,
+        )
 
 
 def clean_checkpoints(

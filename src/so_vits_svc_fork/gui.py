@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import json
+import multiprocessing
+from copy import copy
 from logging import getLogger
 from pathlib import Path
 
@@ -9,9 +11,9 @@ import sounddevice as sd
 import soundfile as sf
 import torch
 from pebble import ProcessFuture, ProcessPool
-from tqdm.tk import tqdm_tk
 
-from .utils import ensure_pretrained_model, get_optimal_device
+from . import __version__
+from .utils import get_optimal_device
 
 GUI_DEFAULT_PRESETS_PATH = Path(__file__).parent / "default_gui_presets.json"
 GUI_PRESETS_PATH = Path("./user_gui_presets.json").absolute()
@@ -95,23 +97,7 @@ def after_inference(window: sg.Window, path: Path, auto_play: bool, output_path:
 
 
 def main():
-    try:
-        ensure_pretrained_model(".", "contentvec", tqdm_cls=tqdm_tk)
-    except Exception as e:
-        LOG.exception(e)
-        LOG.info("Trying tqdm.std...")
-        try:
-            ensure_pretrained_model(".", "contentvec")
-        except Exception as e:
-            LOG.exception(e)
-            try:
-                ensure_pretrained_model(".", "contentvec", disabled=True)
-            except Exception as e:
-                LOG.exception(e)
-                LOG.error(
-                    "Failed to download Hubert model. Please download it manually."
-                )
-                return
+    LOG.info(f"version: {__version__}")
 
     sg.theme("Dark")
     model_candidates = list(sorted(Path("./logs/44k/").glob("G_*.pth")))
@@ -512,8 +498,14 @@ def main():
     del default_name
     update_speaker()
     update_devices()
-    with ProcessPool(max_workers=1) as pool:
+    # with ProcessPool(max_workers=1) as pool:
+    # to support Linux
+    with ProcessPool(
+        max_workers=min(2, multiprocessing.cpu_count()),
+        context=multiprocessing.get_context("spawn"),
+    ) as pool:
         future: None | ProcessFuture = None
+        infer_futures: set[ProcessFuture] = set()
         while True:
             event, values = window.read(200)
             if event == sg.WIN_CLOSED:
@@ -598,6 +590,7 @@ def main():
                             window, input_path, values["auto_play"], output_path
                         )
                     )
+                    infer_futures.add(infer_future)
                 except Exception as e:
                     LOG.exception(e)
             elif event == "play_input":
@@ -670,12 +663,20 @@ def main():
                 except Exception as e:
                     LOG.exception(e)
             if future is not None and future.done():
-                LOG.error("Error in realtime: ")
                 try:
                     future.result()
                 except Exception as e:
+                    LOG.error("Error in realtime: ")
                     LOG.exception(e)
                 future = None
+            for future in copy(infer_futures):
+                if future.done():
+                    try:
+                        future.result()
+                    except Exception as e:
+                        LOG.error("Error in inference: ")
+                        LOG.exception(e)
+                    infer_futures.remove(future)
         if future:
             future.cancel()
     window.close()
