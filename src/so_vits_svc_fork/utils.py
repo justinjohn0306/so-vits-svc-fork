@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 import re
 import subprocess
 import warnings
@@ -26,6 +27,7 @@ from so_vits_svc_fork.hparams import HParams
 
 LOG = getLogger(__name__)
 HUBERT_SAMPLING_RATE = 16000
+IS_COLAB = os.getenv("COLAB_RELEASE_TAG", False)
 
 
 def get_optimal_device(index: int = 0) -> torch.device:
@@ -256,7 +258,7 @@ def load_checkpoint(
             warnings.simplefilter("ignore")
             safe_load(optimizer, checkpoint_dict["optimizer"])
 
-    LOG.info(f"Loaded checkpoint '{checkpoint_path}' (iteration {iteration})")
+    LOG.info(f"Loaded checkpoint '{checkpoint_path}' (epoch {iteration})")
     return model, optimizer, learning_rate, iteration
 
 
@@ -268,7 +270,7 @@ def save_checkpoint(
     checkpoint_path: Path | str,
 ) -> None:
     LOG.info(
-        "Saving model and optimizer state at iteration {} to {}".format(
+        "Saving model and optimizer state at epoch {} to {}".format(
             iteration, checkpoint_path
         )
     )
@@ -328,6 +330,8 @@ def clean_checkpoints(
         for to_delete in to_delete_list:
             if to_delete.exists():
                 LOG.info(f"Removing {to_delete}")
+                if IS_COLAB:
+                    to_delete.write_text("")
                 to_delete.unlink()
 
 
@@ -377,7 +381,7 @@ def get_backup_hparams(
 
 
 def get_hparams(config_path: Path | str) -> HParams:
-    config = json.loads(Path(config_path).read_text())
+    config = json.loads(Path(config_path).read_text("utf-8"))
     hparams = HParams(**config)
     return hparams
 

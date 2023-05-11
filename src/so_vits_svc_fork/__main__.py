@@ -7,7 +7,6 @@ from pathlib import Path
 from typing import Literal
 
 import click
-import pyinputplus as pyip
 import torch
 
 from so_vits_svc_fork import __version__
@@ -164,6 +163,14 @@ def train(
     default=None,
     help="path to cluster model",
 )
+@click.option(
+    "-re",
+    "--recursive",
+    type=bool,
+    default=False,
+    help="Search recursively",
+    is_flag=True,
+)
 @click.option("-t", "--transpose", type=int, default=0, help="transpose")
 @click.option(
     "-db", "--db-thresh", type=int, default=-20, help="threshold (DB) (RELATIVE)"
@@ -202,12 +209,20 @@ def train(
     default=False,
     help="absolute thresh",
 )
+@click.option(
+    "-mc",
+    "--max-chunk-seconds",
+    type=float,
+    default=40,
+    help="maximum allowed single chunk length, set lower if you get out of memory (0 to disable)",
+)
 def infer(
     # paths
     input_path: Path,
     output_path: Path,
     model_path: Path,
     config_path: Path,
+    recursive: bool,
     # svc config
     speaker: str,
     cluster_model_path: Path | None = None,
@@ -221,6 +236,7 @@ def infer(
     pad_seconds: float = 0.5,
     chunk_seconds: float = 0.5,
     absolute_thresh: bool = False,
+    max_chunk_seconds: float = 40,
     device: str | torch.device = get_optimal_device(),
 ):
     """Inference"""
@@ -236,6 +252,10 @@ def infer(
     if output_path is None:
         output_path = input_path.parent / f"{input_path.stem}.out{input_path.suffix}"
     output_path = Path(output_path)
+    if input_path.is_dir() and not recursive:
+        raise ValueError(
+            "input_path is a directory. Use 0re or --recursive to infer recursively."
+        )
     model_path = Path(model_path)
     if model_path.is_dir():
         model_path = list(
@@ -251,6 +271,7 @@ def infer(
         output_path=output_path,
         model_path=model_path,
         config_path=config_path,
+        recursive=recursive,
         # svc config
         speaker=speaker,
         cluster_model_path=cluster_model_path,
@@ -264,6 +285,7 @@ def infer(
         pad_seconds=pad_seconds,
         chunk_seconds=chunk_seconds,
         absolute_thresh=absolute_thresh,
+        max_chunk_seconds=max_chunk_seconds,
         device=device,
     )
 
@@ -716,13 +738,53 @@ def pre_split(
     )
 
 
+@cli.command()
+@click.option(
+    "-i",
+    "--input-dir",
+    type=click.Path(exists=True),
+    required=True,
+    help="path to source dir",
+)
+@click.option(
+    "-o",
+    "--output-dir",
+    type=click.Path(),
+    default=None,
+    help="path to output dir",
+)
+@click.option(
+    "-c/-nc",
+    "--create-new/--no-create-new",
+    type=bool,
+    default=True,
+    help="create a new folder for the speaker if not exist",
+)
+def pre_classify(
+    input_dir: Path | str,
+    output_dir: Path | str | None,
+    create_new: bool,
+) -> None:
+    """Classify multiple audio files into multiple files"""
+    from so_vits_svc_fork.preprocessing.preprocess_classify import preprocess_classify
+
+    if output_dir is None:
+        output_dir = input_dir
+    preprocess_classify(
+        input_dir=input_dir,
+        output_dir=output_dir,
+        create_new=create_new,
+    )
+
+
 @cli.command
 def clean():
     """Clean up files, only useful if you are using the default file structure"""
     import shutil
 
     folders = ["dataset", "filelists", "logs"]
-    if pyip.inputYesNo(f"Are you sure you want to delete files in {folders}?") == "yes":
+    # if pyip.inputYesNo(f"Are you sure you want to delete files in {folders}?") == "yes":
+    if input("Are you sure you want to delete files in {folders}?") in ["yes", "y"]:
         for folder in folders:
             if Path(folder).exists():
                 shutil.rmtree(folder)
@@ -763,8 +825,8 @@ def clean():
 def onnx(
     input_path: Path, output_path: Path, config_path: Path, device: torch.device | str
 ) -> None:
+    """Export model to onnx (currently not working)"""
     raise NotImplementedError("ONNX export is not yet supported")
-    """Export model to onnx"""
     input_path = Path(input_path)
     if input_path.is_dir():
         input_path = list(input_path.glob("*.pth"))[0]

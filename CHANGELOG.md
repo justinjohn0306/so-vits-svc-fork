@@ -2,6 +2,65 @@
 
 <!--next-version-placeholder-->
 
+## v3.14.1 (2023-05-07)
+### Fix
+* **__main__:** Replace pyinputplus with normal input ([#587](https://github.com/voicepaw/so-vits-svc-fork/issues/587)) ([`2b507da`](https://github.com/voicepaw/so-vits-svc-fork/commit/2b507da7da68f6baf00e5b0437d2d08e2d4f1246))
+
+## v3.14.0 (2023-05-06)
+### Feature
+* **gui:** Add batch inference, enhance gui, add custom theme ([#582](https://github.com/voicepaw/so-vits-svc-fork/issues/582)) ([`3ce110b`](https://github.com/voicepaw/so-vits-svc-fork/commit/3ce110be72aa2c614f24249ee26f00cba03f16a8))
+
+## v3.13.3 (2023-05-06)
+### Fix
+* **utils:** Complete removal of ckpts in colab ([#581](https://github.com/voicepaw/so-vits-svc-fork/issues/581)) ([`e8964c6`](https://github.com/voicepaw/so-vits-svc-fork/commit/e8964c604bba31a9a8fa0a27bb5ea72a49a5fa5b))
+
+### Documentation
+* Add Meldoner as a contributor for ideas, and code ([#583](https://github.com/voicepaw/so-vits-svc-fork/issues/583)) ([`880fea8`](https://github.com/voicepaw/so-vits-svc-fork/commit/880fea84696938b6636332d8c5d88664adae4004))
+
+## v3.13.2 (2023-05-06)
+### Fix
+* **gui:** Always refresh output path if input path changed ([#578](https://github.com/voicepaw/so-vits-svc-fork/issues/578)) ([`f79de0c`](https://github.com/voicepaw/so-vits-svc-fork/commit/f79de0c81b6e748f8aa87ab94895c738f1808fcf))
+
+### Documentation
+* **readme:** Fix minor issues in README.md ([#566](https://github.com/voicepaw/so-vits-svc-fork/issues/566)) ([`139ed18`](https://github.com/voicepaw/so-vits-svc-fork/commit/139ed182a39a779d8cbdcefc8022a0ed7ff604cd))
+* **readme:** Add notes about minimum requirements ([#564](https://github.com/voicepaw/so-vits-svc-fork/issues/564)) ([`ae9aece`](https://github.com/voicepaw/so-vits-svc-fork/commit/ae9aece9529145ed76aec24febdc77c07522a110))
+
+## v3.13.1 (2023-05-04)
+### Fix
+* **logger:** Remove FileHandler to avoid PermissionError ([#557](https://github.com/voicepaw/so-vits-svc-fork/issues/557)) ([`38e0c4e`](https://github.com/voicepaw/so-vits-svc-fork/commit/38e0c4ed471c4520571a1585d868e325ea1a57e3))
+
+## v3.13.0 (2023-05-04)
+### Feature
+* **infer:** Add max_chunk_seconds option ([#550](https://github.com/voicepaw/so-vits-svc-fork/issues/550)) ([`101b948`](https://github.com/voicepaw/so-vits-svc-fork/commit/101b9484a86cce634a71054e5b8110998566197b))
+
+### Documentation
+* Add maximxlss as a contributor for code ([#554](https://github.com/voicepaw/so-vits-svc-fork/issues/554)) ([`435ca3c`](https://github.com/voicepaw/so-vits-svc-fork/commit/435ca3c58ab48934622c3d192cc11fd130a4a6f7))
+
+## v3.12.1 (2023-04-30)
+### Fix
+* **utils:** Fix epoch variable name to log in checkpoint save/load functions ([#519](https://github.com/voicepaw/so-vits-svc-fork/issues/519)) ([`0530ea3`](https://github.com/voicepaw/so-vits-svc-fork/commit/0530ea34fa42d9af51c73872b02d6453427c5a00))
+
+### Documentation
+* Add Scorpi as a contributor for code ([#532](https://github.com/voicepaw/so-vits-svc-fork/issues/532)) ([`542d3a8`](https://github.com/voicepaw/so-vits-svc-fork/commit/542d3a8382d97064f13c1dcc4ba11107614dec3f))
+
+## v3.12.0 (2023-04-30)
+### Feature
+* **preprocessing:** Add pre-classify command to manually classify files ([#527](https://github.com/voicepaw/so-vits-svc-fork/issues/527)) ([`7a0319c`](https://github.com/voicepaw/so-vits-svc-fork/commit/7a0319c65f42b0cc54d1d86ae5945d4a356b507a))
+
+## v3.11.2 (2023-04-30)
+### Fix
+* **train:** Decouple lf0 predictor from speaker embeddings ([#528](https://github.com/voicepaw/so-vits-svc-fork/issues/528)) ([`7ab47f4`](https://github.com/voicepaw/so-vits-svc-fork/commit/7ab47f44e2ec77aa8c9e36b2e322d2dca0f94fb0))
+
+## v3.11.1 (2023-04-30)
+### Fix
+* Specify encoding to utf-8 in read_text() and write_text() ([#524](https://github.com/voicepaw/so-vits-svc-fork/issues/524)) ([`e947336`](https://github.com/voicepaw/so-vits-svc-fork/commit/e94733678955430f4e0c8ee5a26627077c0ffad9))
+
+### Documentation
+* Add Highupech as a contributor for bug ([#526](https://github.com/voicepaw/so-vits-svc-fork/issues/526)) ([`8eedc24`](https://github.com/voicepaw/so-vits-svc-fork/commit/8eedc2439b6987f70c94033c3f375ea330498a64))
+* **readme:** Fix typo in README.md ([`1773940`](https://github.com/voicepaw/so-vits-svc-fork/commit/1773940ae4a17a522ebc9fe6c1c70c3e02728341))
+* Add acekagami as a contributor for translation ([#486](https://github.com/voicepaw/so-vits-svc-fork/issues/486)) ([`958b9fd`](https://github.com/voicepaw/so-vits-svc-fork/commit/958b9fdf5fd1d527b63ac488ad21db2ce90539aa))
+* **readme_zh_cn:** Update README_zh_CN.md ([#477](https://github.com/voicepaw/so-vits-svc-fork/issues/477)) ([`1ccd594`](https://github.com/voicepaw/so-vits-svc-fork/commit/1ccd5941e5f17a273dad681301a287aafb7973d9))
+
 ## v3.11.0 (2023-04-23)
 ### Feature
 * **gui:** Configurable output file (#452) ([#453](https://github.com/voicepaw/so-vits-svc-fork/issues/453)) ([`d2e3596`](https://github.com/voicepaw/so-vits-svc-fork/commit/d2e3596d5c0874918712488765e068f4010d62b9))

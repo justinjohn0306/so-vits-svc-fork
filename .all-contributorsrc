@@ -184,7 +184,9 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/43951115?v=4",
       "profile": "https://github.com/Meldoner",
       "contributions": [
-        "bug"
+        "bug",
+        "ideas",
+        "code"
       ]
     },
     {
@@ -324,6 +326,42 @@
       "name": "Alexander Koumis",
       "avatar_url": "https://avatars.githubusercontent.com/u/5108856?v=4",
       "profile": "https://github.com/alexanderkoumis",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "acekagami",
+      "name": "acekagami",
+      "avatar_url": "https://avatars.githubusercontent.com/u/127201056?v=4",
+      "profile": "https://github.com/acekagami",
+      "contributions": [
+        "translation"
+      ]
+    },
+    {
+      "login": "Highupech",
+      "name": "Highupech",
+      "avatar_url": "https://avatars.githubusercontent.com/u/114140670?v=4",
+      "profile": "https://github.com/Highupech",
+      "contributions": [
+        "bug"
+      ]
+    },
+    {
+      "login": "Scorpi",
+      "name": "Scorpi",
+      "avatar_url": "https://avatars.githubusercontent.com/u/969654?v=4",
+      "profile": "https://github.com/Scorpi",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "maximxlss",
+      "name": "Maximxls",
+      "avatar_url": "https://avatars.githubusercontent.com/u/29152154?v=4",
+      "profile": "http://maximxlss.github.io",
       "contributions": [
         "code"
       ]

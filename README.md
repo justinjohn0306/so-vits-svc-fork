@@ -56,6 +56,8 @@ A fork of [`so-vits-svc`](https://github.com/svc-develop-team/so-vits-svc) with 
   <img src="https://img.shields.io/badge/.bat-download-blue?style=flat-square&logo=windows" alt="Download .bat">
 </a>
 
+This BAT file will automatically perform the steps described below.
+
 ### Manual installation
 
 <details>
@@ -137,12 +139,16 @@ svc vc
 svc infer source.wav
 ```
 
-[Pretrained models](https://huggingface.co/models?search=so-vits-svc-4.0) are available on HuggingFace.
+Pretrained models are available on [Hugging Face](https://huggingface.co/models?search=so-vits-svc) or [CIVITAI](https://civitai.com/?query=so-vits-svc).
 
 #### Notes
 
 - If using WSL, please note that WSL requires additional setup to handle audio and the GUI will not work without finding an audio device.
 - In real-time inference, if there is noise on the inputs, the HuBERT model will react to those as well. Consider using realtime noise reduction applications such as [RTX Voice](https://www.nvidia.com/en-us/geforce/guides/nvidia-rtx-voice-setup-guide/) in this case.
+- Models other than for 4.0v1 or this repository are not supported.
+- GPU inference requires at least 4 GB of VRAM. If it does not work, try CPU inference as it is fast enough. [^r-inference]
+
+[^r-inference]: [#469](https://github.com/voicepaw/so-vits-svc-fork/issues/469)
 
 ### Training
 
@@ -151,6 +157,7 @@ svc infer source.wav
 - If your dataset has BGM, please remove the BGM using software such as [Ultimate Vocal Remover](https://ultimatevocalremover.com/). `3_HP-Vocal-UVR.pth` or `UVR-MDX-NET Main` is recommended. [^1]
 - If your dataset is a long audio file with a single speaker, use `svc pre-split` to split the dataset into multiple files (using `librosa`).
 - If your dataset is a long audio file with multiple speakers, use `svc pre-sd` to split the dataset into multiple files (using `pyannote.audio`). Further manual classification may be necessary due to accuracy issues. If speakers speak with a variety of speech styles, set --min-speakers larger than the actual number of speakers. Due to unresolved dependencies, please install `pyannote.audio` manually: `pip install pyannote-audio`.
+- To manually classify audio files, `svc pre-classify` is available. Up and down arrow keys can be used to change the playback speed.
 
 [^1]: https://ytpmv.info/how-to-use-uvr/
 
@@ -178,6 +185,7 @@ svc train -t
 #### Notes
 
 - Dataset audio duration per file should be <~ 10s.
+- Need at least 4GB of VRAM. [^r-training]
 - It is recommended to increase the `batch_size` as much as possible in `config.json` before the `train` command to match the VRAM capacity. Setting `batch_size` to `auto-{init_batch_size}-{max_n_trials}` (or simply `auto`) will automatically increase `batch_size` until OOM error occurs, but may not be useful in some cases.
 - To use `CREPE`, replace `svc pre-hubert` with `svc pre-hubert -fm crepe`.
 - To use `ContentVec` correctly, replace `svc pre-config` with `-t so-vits-svc-4.0v1`. Training may take slightly longer because some weights are reset due to reusing legacy initial generator weights.
@@ -185,6 +193,8 @@ svc train -t
 - Silence removal and volume normalization are automatically performed (as in the upstream repo) and are not required.
 - If you have trained on a large, copyright-free dataset, consider releasing it as an initial model.
 - For further details (e.g. parameters, etc.), you can see the [Wiki](https://github.com/34j/so-vits-svc-fork/wiki) or [Discussions](https://github.com/34j/so-vits-svc-fork/discussions).
+
+[^r-training]: [#456](https://github.com/voicepaw/so-vits-svc-fork/issues/456)
 
 ### Further help
 
@@ -209,7 +219,8 @@ Options:
 Commands:
   clean          Clean up files, only useful if you are using the default file structure
   infer          Inference
-  onnx           Export model to onnx
+  onnx           Export model to onnx (currently not working)
+  pre-classify   Classify multiple audio files into multiple files
   pre-config     Preprocessing part 2: config
   pre-hubert     Preprocessing part 3: hubert If the HuBERT model is not found, it will be...
   pre-resample   Preprocessing part 1: resample
@@ -255,7 +266,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/ColdCawfee"><img src="https://avatars.githubusercontent.com/u/79474598?v=4?s=80" width="80px;" alt="ColdCawfee"/><br /><sub><b>ColdCawfee</b></sub></a><br /><a href="https://github.com/voicepaw/so-vits-svc-fork/issues?q=author%3AColdCawfee" title="Bug reports">🐛</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/sbersier"><img src="https://avatars.githubusercontent.com/u/34165937?v=4?s=80" width="80px;" alt="sbersier"/><br /><sub><b>sbersier</b></sub></a><br /><a href="#ideas-sbersier" title="Ideas, Planning, & Feedback">🤔</a> <a href="#userTesting-sbersier" title="User Testing">📓</a> <a href="https://github.com/voicepaw/so-vits-svc-fork/issues?q=author%3Asbersier" title="Bug reports">🐛</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Meldoner"><img src="https://avatars.githubusercontent.com/u/43951115?v=4?s=80" width="80px;" alt="Meldoner"/><br /><sub><b>Meldoner</b></sub></a><br /><a href="https://github.com/voicepaw/so-vits-svc-fork/issues?q=author%3AMeldoner" title="Bug reports">🐛</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Meldoner"><img src="https://avatars.githubusercontent.com/u/43951115?v=4?s=80" width="80px;" alt="Meldoner"/><br /><sub><b>Meldoner</b></sub></a><br /><a href="https://github.com/voicepaw/so-vits-svc-fork/issues?q=author%3AMeldoner" title="Bug reports">🐛</a> <a href="#ideas-Meldoner" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/voicepaw/so-vits-svc-fork/commits?author=Meldoner" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/mmodeusher"><img src="https://avatars.githubusercontent.com/u/46575920?v=4?s=80" width="80px;" alt="mmodeusher"/><br /><sub><b>mmodeusher</b></sub></a><br /><a href="https://github.com/voicepaw/so-vits-svc-fork/issues?q=author%3Ammodeusher" title="Bug reports">🐛</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/AlonDan"><img src="https://avatars.githubusercontent.com/u/21152334?v=4?s=80" width="80px;" alt="AlonDan"/><br /><sub><b>AlonDan</b></sub></a><br /><a href="https://github.com/voicepaw/so-vits-svc-fork/issues?q=author%3AAlonDan" title="Bug reports">🐛</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/Likkkez"><img src="https://avatars.githubusercontent.com/u/44336181?v=4?s=80" width="80px;" alt="Likkkez"/><br /><sub><b>Likkkez</b></sub></a><br /><a href="https://github.com/voicepaw/so-vits-svc-fork/issues?q=author%3ALikkkez" title="Bug reports">🐛</a></td>
@@ -275,6 +286,12 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/ZeroHackz"><img src="https://avatars.githubusercontent.com/u/15729496?v=4?s=80" width="80px;" alt="Exosfeer"/><br /><sub><b>Exosfeer</b></sub></a><br /><a href="https://github.com/voicepaw/so-vits-svc-fork/issues?q=author%3AZeroHackz" title="Bug reports">🐛</a> <a href="https://github.com/voicepaw/so-vits-svc-fork/commits?author=ZeroHackz" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/guranon"><img src="https://avatars.githubusercontent.com/u/130421189?v=4?s=80" width="80px;" alt="guranon"/><br /><sub><b>guranon</b></sub></a><br /><a href="https://github.com/voicepaw/so-vits-svc-fork/issues?q=author%3Aguranon" title="Bug reports">🐛</a> <a href="#ideas-guranon" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/voicepaw/so-vits-svc-fork/commits?author=guranon" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/alexanderkoumis"><img src="https://avatars.githubusercontent.com/u/5108856?v=4?s=80" width="80px;" alt="Alexander Koumis"/><br /><sub><b>Alexander Koumis</b></sub></a><br /><a href="https://github.com/voicepaw/so-vits-svc-fork/commits?author=alexanderkoumis" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/acekagami"><img src="https://avatars.githubusercontent.com/u/127201056?v=4?s=80" width="80px;" alt="acekagami"/><br /><sub><b>acekagami</b></sub></a><br /><a href="#translation-acekagami" title="Translation">🌍</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Highupech"><img src="https://avatars.githubusercontent.com/u/114140670?v=4?s=80" width="80px;" alt="Highupech"/><br /><sub><b>Highupech</b></sub></a><br /><a href="https://github.com/voicepaw/so-vits-svc-fork/issues?q=author%3AHighupech" title="Bug reports">🐛</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Scorpi"><img src="https://avatars.githubusercontent.com/u/969654?v=4?s=80" width="80px;" alt="Scorpi"/><br /><sub><b>Scorpi</b></sub></a><br /><a href="https://github.com/voicepaw/so-vits-svc-fork/commits?author=Scorpi" title="Code">💻</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="http://maximxlss.github.io"><img src="https://avatars.githubusercontent.com/u/29152154?v=4?s=80" width="80px;" alt="Maximxls"/><br /><sub><b>Maximxls</b></sub></a><br /><a href="https://github.com/voicepaw/so-vits-svc-fork/commits?author=maximxlss" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
