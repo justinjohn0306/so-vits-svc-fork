@@ -131,6 +131,15 @@ def train(
 
 
 @cli.command()
+def gui():
+    """Opens GUI
+    for conversion and realtime inference"""
+    from .gui import main
+
+    main()
+
+
+@cli.command()
 @click.argument(
     "input-path",
     type=click.Path(exists=True),
@@ -537,7 +546,7 @@ from so_vits_svc_fork.preprocessing.preprocess_flist_config import CONFIG_TEMPLA
     "-t",
     "--config-type",
     type=click.Choice([x.stem for x in CONFIG_TEMPLATE_DIR.rglob("*.json")]),
-    default="so-vits-svc-4.0v1-legacy",
+    default="so-vits-svc-4.0v1",
     help="config type",
 )
 def pre_config(
