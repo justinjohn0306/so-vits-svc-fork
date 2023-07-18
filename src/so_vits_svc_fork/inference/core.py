@@ -134,7 +134,11 @@ class Svc:
             **self.hps.model,
         )
         _ = utils.load_checkpoint(self.net_g_path, self.net_g, None)
-        _ = self.net_g.eval().to(self.device, dtype=self.dtype)
+        _ = self.net_g.eval()
+        for m in self.net_g.modules():
+            utils.remove_weight_norm_if_exists(m)
+        _ = self.net_g.to(self.device, dtype=self.dtype)
+        self.net_g = self.net_g
 
     def get_unit_f0(
         self,
@@ -235,7 +239,7 @@ class Svc:
                 )[0, 0].data.float()
             audio_duration = audio.shape[-1] / self.target_sample
             LOG.info(
-                f"Inferece time: {t.elapsed:.2f}s, RTF: {t.elapsed / audio_duration:.2f}"
+                f"Inference time: {t.elapsed:.2f}s, RTF: {t.elapsed / audio_duration:.2f}"
             )
         torch.cuda.empty_cache()
         return audio, audio.shape[-1]
